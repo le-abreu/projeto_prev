@@ -1,0 +1,29 @@
+package br.com.brasilprev.ecommerce;
+
+import java.math.BigDecimal;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+
+import br.com.brasilprev.banco.CorrelationId;
+import br.com.brasilprev.banco.dispatcher.KafkaDispatcher;
+
+public class NewOrderMain {
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        try (var orderDispatcher = new KafkaDispatcher<Order>()) {
+            var email = Math.random() + "@email.com";
+            for (var i = 0; i < 10; i++) {
+
+                var orderId = UUID.randomUUID().toString();
+                var amount = new BigDecimal(Math.random() * 5000 + 1);
+
+                var id = new CorrelationId(NewOrderMain.class.getSimpleName());
+
+                var order = new Order(orderId, amount, email);
+                orderDispatcher.send("ECOMMERCE_NEW_ORDER", email,
+                        id, order);
+            }
+        }
+    }
+
+}
