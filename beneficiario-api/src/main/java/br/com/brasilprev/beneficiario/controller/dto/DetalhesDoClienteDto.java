@@ -8,6 +8,7 @@ public class DetalhesDoClienteDto {
 	private String nome;
 	private String email;
 	private Double valorTotal;
+	private Double valorMensal;
 	private Long anosReceber;
 
 	public DetalhesDoClienteDto(Cliente cliente) {
@@ -16,6 +17,7 @@ public class DetalhesDoClienteDto {
 		this.email = cliente.getEmail();
 		this.valorTotal = cliente.getValorTotal();
 		this.anosReceber = cliente.getAnosReceber();
+		this.valorMensal = this.valorTotal/(this.anosReceber * 12);
 	}
 
 	public String getCpf() {
@@ -36,6 +38,10 @@ public class DetalhesDoClienteDto {
 
 	public Long getAnosReceber() {
 		return anosReceber;
+	}
+	
+	public Double getValorMensal() {
+		return valorMensal;
 	}
 
 }
